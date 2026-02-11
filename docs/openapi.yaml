@@ -36,7 +36,7 @@ paths:
                 mobile:
                   type: string
                   description: Local number without '+' and country code
-                  example: "615871112"
+                  example: "617953152"
       responses:
         "200":
           description: Successful response
@@ -50,8 +50,8 @@ paths:
                 ReplyMessage: Success
                 data:
                   - Status: Normal
-                    EmpId: MAD00073
-                    Name: Cabdi Maxamuud Yuusuf Cismaan
+                    EmpId: SH87991
+                    Name: Mohamed Mahad Farah
 
         "400":
           $ref: "#/components/responses/BadRequest"
@@ -92,11 +92,11 @@ paths:
                 Tell:
                   type: string
                   description: Local phone number without '+' and country code
-                  example: "614555777"
+                  example: "617953152"
                 ActionDate:
                   type: string
                   format: date
-                  example: "2025-09-21"
+                  example: "2026-02-01"
                 OrderId:
                   type: string
                   description: Unique request reference
@@ -122,8 +122,8 @@ paths:
                 ReplyMessage: Success
                 data:
                   - Status: Normal
-                    EmpId: STH01441
-                    Name: Mukhtaar Sheekh Daahir Xaaji Xaashi
+                    EmpId: SH87991
+                    Name: Mohamed Mahad Farah
 
         "400":
           $ref: "#/components/responses/BadRequest"
@@ -172,10 +172,10 @@ components:
                 example: Normal
               EmpId:
                 type: string
-                example: MAD00073
+                example: SK99000
               Name:
                 type: string
-                example: Cabdi Maxamuud Yuusuf Cismaan
+                example: Mohamed Mahad Farah
 
     ErrorResponse:
       type: object
