@@ -1,21 +1,27 @@
 openapi: 3.0.3
+
 info:
   title: Sahal Service Staff Offer API Documentation
   version: 1.0.0
   description: |
-    REST API for partner companies to verify employees and save SomGas loan adjustments.
+    REST API for partner companies to verify employees 
+    and save SomGas loan adjustments.
+
 servers:
-  - url: https://api.yourcompany.com
+  - url: https://api.domain.com
+
 security:
   - ApiKeyAuth: []
 
 paths:
+
   /api/v1/employees/status:
     post:
       summary: Check Employee Status
       description: Checks whether an employee exists and returns their current status.
       operationId: checkEmployeeStatus
-      tags: [Employees]
+      tags:
+        - Employees
       security:
         - ApiKeyAuth: []
       requestBody:
@@ -24,44 +30,29 @@ paths:
           application/json:
             schema:
               type: object
-              required: [mobile]
+              required:
+                - mobile
               properties:
                 mobile:
                   type: string
-                  example: "617953152"
                   description: Local number without '+' and country code
-            examples:
-              byMobile:
-                summary: Check by local mobile
-                value:
-                  mobile: "617953152"
+                  example: "615871112"
       responses:
         "200":
-          description: Success
+          description: Successful response
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Success
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      required: [Status, EmpId, Name]
-                      properties:
-                        Status:
-                          type: string
-                          enum: [Active, Inactive, Temporary, NotFound]
-                          example: Active
-                        EmpId:
-                          type: string
-                          example: S18289
-                        Name:
-                          type: string
-                          example: Mohamed Mahad Farah
+                $ref: "#/components/schemas/StandardSuccessResponse"
+              example:
+                ResultCode: 0
+                Language: 0
+                ReplyMessage: Success
+                data:
+                  - Status: Normal
+                    EmpId: MAD00073
+                    Name: Cabdi Maxamuud Yuusuf Cismaan
+
         "400":
           $ref: "#/components/responses/BadRequest"
         "401":
@@ -74,9 +65,10 @@ paths:
   /api/v1/employees/debts/confirm:
     post:
       summary: Save SomGas Loan / Adjustment
-      description: Creates an adjustment record (e.g., loan deduction/payment) for an employee.
+      description: Creates an adjustment record for an employee.
       operationId: saveSomgasLoanAdjustment
-      tags: [Adjustments]
+      tags:
+        - Adjustments
       security:
         - ApiKeyAuth: []
       requestBody:
@@ -85,53 +77,54 @@ paths:
           application/json:
             schema:
               type: object
-              required: [Amount, Tell, ActionDate, OrderId, Isconfirmed]
+              required:
+                - Amount
+                - Tell
+                - ActionDate
+                - OrderId
+                - Isconfirmed
               properties:
                 Amount:
                   type: number
                   format: double
-                  description: Positive amount for charge; negative not allowed
-                  example: 10.35
+                  description: Positive amount only
+                  example: 0.30
                 Tell:
                   type: string
                   description: Local phone number without '+' and country code
-                  example: "615585400"
+                  example: "614555777"
                 ActionDate:
                   type: string
                   format: date
-                  example: "2025-09-06"
+                  example: "2025-09-21"
                 OrderId:
                   type: string
                   description: Unique request reference
-                  example: "S174825"
+                  example: "345402532"
                 Isconfirmed:
-                  description: "Confirmation flag: '1' confirmed, '0' pending"
+                  description: 1 = confirmed, 0 = pending
                   oneOf:
-                    - type: string
-                      enum: ["0", "1"]
                     - type: integer
                       enum: [0, 1]
-                  example: "1"
-            examples:
-              confirmExample:
-                summary: Confirm a loan/adjustment
-                value:
-                  Amount: 10.35
-                  Tell: "617953152"
-                  ActionDate: "2025-09-06"
-                  OrderId: "S174825"
-                  Isconfirmed: "1"
+                    - type: string
+                      enum: ["0", "1"]
+                  example: 1
       responses:
         "200":
-          description: Success
+          description: Successful response
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Success
+                $ref: "#/components/schemas/StandardSuccessResponse"
+              example:
+                ResultCode: 0
+                Language: 0
+                ReplyMessage: Success
+                data:
+                  - Status: Normal
+                    EmpId: STH01441
+                    Name: Mukhtaar Sheekh Daahir Xaaji Xaashi
+
         "400":
           $ref: "#/components/responses/BadRequest"
         "401":
@@ -139,7 +132,7 @@ paths:
         "404":
           $ref: "#/components/responses/NotFound"
         "409":
-          description: Business rule violation (e.g., inactive employee)
+          description: Business rule violation
           content:
             application/json:
               schema:
@@ -148,56 +141,85 @@ paths:
           $ref: "#/components/responses/RateLimited"
 
 components:
+
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
       in: header
-      name: X-API-Key
+      name: Authorization
 
   schemas:
+
+    StandardSuccessResponse:
+      type: object
+      properties:
+        ResultCode:
+          type: integer
+          example: 0
+        Language:
+          type: integer
+          example: 0
+        ReplyMessage:
+          type: string
+          example: Success
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              Status:
+                type: string
+                example: Normal
+              EmpId:
+                type: string
+                example: MAD00073
+              Name:
+                type: string
+                example: Cabdi Maxamuud Yuusuf Cismaan
+
     ErrorResponse:
       type: object
       properties:
-        error:
-          type: object
-          properties:
-            code:
-              type: string
-              example: invalid_request
-            message:
-              type: string
-              example: Human readable message
-            details:
-              type: object
-              additionalProperties: true
+        ResultCode:
+          type: integer
+          example: 1
+        Language:
+          type: integer
+          example: 0
+        ReplyMessage:
+          type: string
+          example: Invalid request
 
   responses:
+
     BadRequest:
       description: Invalid input
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/ErrorResponse"
+
     Unauthorized:
       description: Missing or invalid API key
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/ErrorResponse"
+
     NotFound:
       description: Resource not found
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/ErrorResponse"
+
     RateLimited:
       description: Too many requests
       headers:
         Retry-After:
           schema:
             type: integer
-            description: Seconds to wait before retrying
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/ErrorResponse"
+            $ref: "#/compone
