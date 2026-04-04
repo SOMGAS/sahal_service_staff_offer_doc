@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Sahal Service Staff Offer API Documentation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    }
+
+    .topbar {
+      padding: 14px 20px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      align-items: center;
+      background: #ffffff;
+    }
+
+    .topbar strong {
+      font-size: 16px;
+    }
+
+    .spacer {
+      flex: 1;
+    }
+
+    .topbar a {
+      text-decoration: none;
+      font-size: 14px;
+      color: #0066cc;
+    }
+
+    #redoc-container {
+      height: calc(100vh - 52px);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="topbar">
+    <strong>Sahal Service Staff Offer API Documentation</strong>
+    <div class="spacer"></div>
+    <a href="./docs/openapi.yaml" download>Download OpenAPI YAML</a>
+  </div>
+
+  <div id="redoc-container"></div>
+
+  <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"></script>
+
+  <script>
+    Redoc.init('./docs/openapi.yaml', {
+      scrollYOffset: 50,
+      hideDownloadButton: false,
+      expandResponses: "200",
+      requiredPropsFirst: true,
+      sortPropsAlphabetically: false,
+      theme: {
+        colors: {
+          primary: {
+            main: '#0066cc'
+          }
+        }
+      }
+    }, document.getElementById('redoc-container'));
+  </script>
+
+</body>
+</html>
