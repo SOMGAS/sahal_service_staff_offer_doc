@@ -8,7 +8,7 @@ info:
     and save SomGas loan adjustments.
 
 servers:
-  - url: https://api.domain.com
+  - url: http://161.97.124.100:9009
 
 security:
   - ApiKeyAuth: []
@@ -88,7 +88,7 @@ paths:
                   type: number
                   format: double
                   description: Positive amount only
-                  example: 0.30
+                  example: 10.80
                 Tell:
                   type: string
                   description: Local phone number without '+' and country code
@@ -96,11 +96,11 @@ paths:
                 ActionDate:
                   type: string
                   format: date
-                  example: "2026-02-01"
+                  example: "2026-01-27"
                 OrderId:
                   type: string
                   description: Unique request reference
-                  example: "345402532"
+                  example: "S69283"
                 Isconfirmed:
                   description: 1 = confirmed, 0 = pending
                   oneOf:
@@ -120,13 +120,19 @@ paths:
                 ResultCode: 0
                 Language: 0
                 ReplyMessage: Success
-                data:
-                  - Status: Normal
-                    EmpId: SH87991
-                    Name: Mohamed Mahad Farah
+                data: null
 
         "400":
-          $ref: "#/components/responses/BadRequest"
+          description: Invalid input or duplicate OrderId
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                ResultCode: 2
+                Language: 0
+                ReplyMessage: "OrderId already exists"
+                data: null
         "401":
           $ref: "#/components/responses/Unauthorized"
         "404":
@@ -222,4 +228,4 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/compone
+            $ref: "#/components/schemas/ErrorResponse"
